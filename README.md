@@ -21,6 +21,19 @@ npm install
 node index.js --token "16e2af1f-4231-4370-a127-ca00280e568b"
 ```
 
+Остальные параметры:
+```
+node index.js --help
+
+Options:
+  --token <token>    API Token
+  --api [api]        API endpoint
+  --pause [pause]    Pause in ms between ticks. Default 30000
+  --random [random]  Place random orders. Default false
+  --amount [amount]  Order amount in USD. Default 1 USD
+  -h, --help         output usage information
+```
+
 Каждые 30 секунд бот проверят курсы на kraken, отменяет свои старые ордера, выставляет новые и делает случайную сделку.
 
 ## API
