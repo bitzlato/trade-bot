@@ -54,7 +54,14 @@ Options:
 
 Например:
 ```
-node index.js --api http://localhost:3000/api --token "dfbde5a6-119b-4c44-8194-0d6024093ead" --pause=10000 --amount 10 --pairs ETH-BTC,ETH-BCH --bid-levels 2 --ask-levels 2,3
+node index.js --api http://localhost:3000/api \
+  --token "dfbde5a6-119b-4c44-8194-0d6024093ead" \
+  --pause=10000 \
+  --amount 10 \
+  --pairs ETH-BTC,ETH-BCH \
+  --bid-levels 2 \
+  --ask-levels 2,3 \
+  /
 ```
 
 Каждые 30 секунд бот проверят курсы на kraken, отменяет свои старые ордера, выставляет новые и делает случайную сделку.
