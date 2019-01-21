@@ -46,6 +46,7 @@ Options:
   --pause [pause]    Pause in ms between ticks. Default 30000
   --random [random]  Place random orders. Default false
   --amount [amount]  Order amount in USD. Default 1 USD
+  --pairs [pairs]    List of comma-separated bitzlato pairs to work on. Default all
   -h, --help         output usage information
 ```
 
