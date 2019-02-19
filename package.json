@@ -29,6 +29,7 @@
     "commander": "^2.19.0"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.16.0",
     "eslint": "^5.12.1",
     "jest": "^23.6.0",
     "prettier": "^1.15.3"

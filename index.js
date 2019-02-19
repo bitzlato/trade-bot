@@ -1,6 +1,6 @@
 const program = require('commander');
 
-const { startApp, stopApp } = require('./lib/mirror');
+const { createApp } = require('./lib/mirror');
 
 program
     .option('--token <token>', 'API Token')
@@ -25,12 +25,13 @@ const config = {
     random: program.random || false,
     amount: program.amount || '1',
     pairs: program.pairs || 'all',
-    levels: program.levels || 'default',
     bidLevels: program.bidLevels || '1,0.95,0.9,0.85,0.8',
     askLevels: program.askLevels || '1,1.05,1.1,1.15,1.2',
 };
 
-const appPromise = startApp(config);
+const app = createApp(config);
 
-process.on('SIGTERM', () => appPromise.then(() => stopApp()));
-process.on('SIGINT', () => appPromise.then(() => stopApp()));
+const appPromise = app.start();
+
+process.on('SIGTERM', () => appPromise.then(() => app.stop()));
+process.on('SIGINT', () => appPromise.then(() => app.stop()));
