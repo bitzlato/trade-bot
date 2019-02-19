@@ -25,13 +25,13 @@
   "homepage": "https://github.com/bitzlato/trade-bot#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "ccxt": "^1.18.114",
+    "ccxt": "^1.18.258",
     "commander": "^2.19.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.16.0",
-    "eslint": "^5.12.1",
-    "jest": "^23.6.0",
-    "prettier": "^1.15.3"
+    "eslint": "^5.14.1",
+    "jest": "^24.1.0",
+    "prettier": "^1.16.4"
   }
 }
