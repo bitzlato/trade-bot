@@ -53,211 +53,211 @@ node index.js --api https://bitzlato.com/api \
 
 Каждые 10 секунд бот проверят курсы на kraken, отменяет свои старые ордера, выставляет новый ордер -5% на покупку, и два ордера на продажу +5% и +12%.
 
-## API
+## API BITZLATO EXCHANGE
+_API in russian language is here https://github.com/bitzlato/trade-bot/blob/master/API_bitzlato_exchange_RUS.md_
 
-Ниже список API методов, которые помогут написать своего торгового бота. 
-**ВАЖНО**: список методов, параметры и формат данных могут меняться пока биржа в режиме бета-тестирования.
+** IMPORTANT **: the list of methods, parameters and data format may change while the exchange is in beta testing mode.
 
-# Общее описание
+# General description
 
-**ВАЖНО**: Любая величина, представляющая собой количество криптовалюты, всегда передаётся как строка! Точностью
-операций с деньгами управляет сервер.
+** IMPORTANT **: Any value representing the number of cryptocurrencies is always transmitted as a string! Money management Precision
+ is managed by the server.
 
-**ВНИМАНИЕ**: все `GET`-параметры (идущие после `?`) являются опциональными, для параметров `limit` и `skip` на сервере
-при необходимости должны использоваться значения по умолчанию (предположительно, 100 и 0 соответственно, но может
-зависеть от типа запроса).
+** ATTENTION **: all `GET`-parameters (going after`? `) are optional, for the` limit` and `skip` parameters on the server 
+should be used default values. (100 and 0 but may depend on the type of request).
 
-Все маршруты, начинающиеся на `/api/market/v1/public/` являются публичными и обрабатываются без контроля
-доступа. Маршруты, начинающиеся на `/api/market/v1/private/:userId/`, требуют аутентификации и проверки того, что
-переданный токен доступа принадлежит пользователю `userId`.
+All routes starting at `/ api / market / v1 / public /` are public and are processed without access control.
+Routes starting with `/ api / market / v1 / private /: userId /` require authentication and verification that
+the passed access token belongs to user `userId`.
 
-# Получение информации о пользователе
+# Getting information about the user
 
-Позволяет получить `userId` для дальнейшего использования
+Allows you to get `userId` for future use.
 
-## GET /api/auth/whoami
+## GET / api / auth / whoami
 
-    {
-        name: ...,
-        userId: ...,
-    }
+    {
+        name: ...,
+        userId: ...,
+    }
 
-* `name` - Nickname пользователя
-* 
-* `userId` - числовой идентификатор пользователя
+* `name` - user's nickname
+*
+* `userId` - numeric user id
 
-# Валютные пары
+# Currency pairs
 
-## GET /api/market/v1/public/pairs/
+## GET / api / market / v1 / public / pairs /
 
-Получение списка валютных пар.
+Getting a list of currency pairs.
 
-Формат ответа:
+Answer format:
 
-    [
-      {
-        id: ...,
-        label: ...,
-        status: ...,
-        price: {
-          min: ...,
-          max: ...,
-          last: ...
-        },
-        volume: {
-          base: ...,
-          quote: ...
-        },
-        priceChange: ...,
-      },
-      ....
-    ]
-    
-Формат описания валютной пары совпадает с форматом ответа маршрута `GET /api/market/v1/public/pairs/:id`.
-    
+    [
+      {
+        id: ...,
+        label: ...,
+        status: ...,
+        price: {
+          min: ...,
+          max: ...,
+          last: ...
+        },
+        volume: {
+          base: ...,
+          quote: ...
+        },
+        priceChange: ...,
+      },
+      ....
+    ]
+    
+The format for describing a currency pair is the same as the response format of the `GET / api / market / v1 / public / pairs /: id` route.
+    
 
-## GET /api/market/v1/public/pairs/:id
+## GET / api / market / v1 / public / pairs /: id
 
-Получение информации о валютной паре с идентификатором `id`.
+Getting information about the currency pair with the identificator id.
 
-Формат ответа:
+Answer format:
 
-    {
-      id: ...,
-      label: ...,
-      status: ...,
-      price: {
-        min: ...,
-        max: ...,
-        last: ...
-      },
-      volume: {
-        base: ...,
-        quote: ...
-      },
-      priceChange: ...,
-    }
-    
-* `id` - идентификатор валютной пары в формате `:(base)-:(quote)`, где
-  `base` - это `базовая` валюта, а `quote` - котируемая валюта
-  
-* `label` - отображаемое наименование валютной пары, может совпадать с `id`, но может и отличаться
-  
-* `status` - статус валютной пары, возможные значения: `active`, `frozen`
+    {
+      id: ...,
+      label: ...,
+      status: ...,
+      price: {
+        min: ...,
+        max: ...,
+        last: ...
+      },
+      volume: {
+        base: ...,
+        quote: ...
+      },
+      priceChange: ...,
+    }
+    
+* `id` - currency pair identifier in the format`: (base) - :( quote) `, where
+  `base` is the` base` currency, and `quote` is the quoted currency
+  
+* `label` - the displayed name of the currency pair may be the same as ʻid`, but it may differ
+  
+* `status` - currency pair status, possible values:` active`, `frozen`
 
-* `price` - информация о биржевом курс по данной валютной паре
+* `price` - information about the exchange rate for this currency pair
 
-* `price.min` - максимальная цена за последние 24 часа
+* `price.min` - the maximum price for the last 24 hours
 
-* `price.max` - минимальная цена за последние 24 часа
+* `price.max` - the minimum price for the last 24 hours
 
-* `price.last` - цена последней сделки
+* `price.last` - the price of the last transaction
 
-* `volume` - объём торгов по данной валютной паре за последние 24 часа
+* `volume` - trading volume for this currency pair in the last 24 hours
 
-* `volume.base` - объём в базовой валюте
+* `volume.base` - volume in base currency
 
-* `volume.quote` - объём в котируемой валюте
+* `volume.quote` - volume in quoted currency
 
-* `priceChange` - изменение цены за 24 часа, знак является индикатором направление изменения
+* `priceChange` - price change for 24 hours, the sign is an indicator of the direction of change
 
-# Работа с публичными ордерами
+# Work with public orders
 
-## GET /api/market/v1/public/orders/:pair/:offerType
+## GET / api / market / v1 / public / orders /: pair /: offerType
 
-Получение списка активных (открытых) ордеров.
+Getting a list of active (open) orders.
 
-Результат должен быть отсортирован по цене:
+The result should be sorted by price:
 
-для `bid` от наибольшего к наименьшему
+for `bid` from the highest to the lowest
 
-для `ask` от наименьшего к наибольшему
+for `ask` from the lowest to the highest
 
-Параметры запроса:
+Request parameters:
 
-* `pair` - идентификатор валютной пары
+* `pair` - currency pair identifier
 
-* `offerType` - тип ордера, возможные варианты: `bid` или `ask`
+* `offerType` - order type, possible options:` bid` or `ask`
 
-Формат ответа:
+Answer format:
 
-    {
-      data: [
-        {
-          id: ...,
-          pair: ...,
-          offerType: ...,
-          amount: ...,
-          price: ...
-        },
-        ...
-      ],
-      maxCount: ...
-   }
-   
-* `data` - массив с описаниями ордеров, которые должные быть отсортированы по `data.price`: в случае `bid` по
-   возрастанию, а в случае `ask` по убыванию.
-    
-* `data.pair` - идентификатор валютной пары
+    {
+      data: [
+        {
+          id: ...,
+          pair: ...,
+          offerType: ...,
+          amount: ...,
+          price: ...
+        },
+        ...
+      ],
+      maxCount: ...
+   }
+   
+* `data` - an array with order descriptions that should be sorted by` data.price`: in the case of `bid` by
+   ascending, and in the case of an `ask` descending.
+    
+* `data.pair` - currency pair identifier
 
-* `data.offerType` - тип ордера, возможные варианты: `bid` или `ask`
+* `data.offerType` - type of order, possible options:` bid` or `ask`
 
-* `data.amount` - размер ордера в `базовой` валюте
+* `data.amount` - order size in the` base` currency
 
-* `data.price` - цена `базовой` валюты в `котируемой`
+* `data.price` - the price of the` base` currency in the `quoted`
 
-* `maxCount` - максимальное колличество записей, которое может вернуть сервер (фактическое колличество может быть
-  меньше)
+* `maxCount` - the maximum number of records that the server can return (the actual number can be
+  less)
 
-## GET /api/market/v1/public/trades/:pair/
+## GET / api / market / v1 / public / trades /: pair /
 
-Получение списка последних сделок (см. `order_logs`). Параметры запроса:
+Getting a list of recent deals (see `order_logs`). Request parameters:
 
-* `:pair` - идентификатор валютной пары
+* `: pair` - currency pair identifier
 
-Формат ответа:
+Answer format:
 
-    {
-      data: [
-        {
-          id: ...,
-          amount: {
-             base: ...,
-             quote: ...
-          },
-          price: ...,
-          date: ...,
-          type: ...
-        },
-        ...
-      ],
-      maxCount: ...
-    }
-    
-* `data` - массив с описаниями последних сделок
+    {
+      data: [
+        {
+          id: ...,
+          amount: {
+             base: ...,
+             quote: ...
+          },
+          price: ...,
+          date: ...,
+          type: ...
+        },
+        ...
+      ],
+      maxCount: ...
+    }
+    
+* `data` - an array with descriptions of recent deals
 
-* `data.id` - идентификатор сделки
+* `data.id` - deal ID
 
-* `data.amount` - описание размера сделки
+* `data.amount` - description of the deal size
 
-* `data.amount.base` - размер сделки в `базовой` валюте
+* `data.amount.base` - deal size in the` base` currency
 
-* `data.amount.quote` - размер сделки в `котируемой` валюте
+* `data.amount.quote` - deal size in` quoted 'currency
 
-* `data.price` - цена `базовой` валюты в `котируемой`
+* `data.price` - the price of the` base` currency in the `quoted`
 
-* `data.date` - дата совершения сделки
+* `data.date` - the date of the transaction
 
-* `data.side` - тип сделки `sell` или `buy` определяется по типу более нового ордера
+* `data.side` - the type of the deal` sell` or `buy` is determined by the type of a new order
 
-* `maxCount` - максимальное колличество записей, которое может вернуть сервер (фактическое колличество может быть
-  меньше)
+* `maxCount` - the maximum number of records that the server can return (the actual number can be
+  less)
 
-# Работа с собственными ордерами
 
-## GET /api/market/v1/private/:userId/orders/:orderId
+# Work with your own orders
 
-Получение описания собственного ордера
+## GET / api / market / v1 / private /: userId / orders /: orderId
+
+Getting a description of your own order
 
     {
       id: ...,
@@ -275,39 +275,39 @@ node index.js --api https://bitzlato.com/api \
       created: ...
     }
     
-* `id` - идентификатор ордера
+* `id` - order identifier
 
-* `pair` - идентификатор валютной пары 
+* `pair` - currency pair identifier
 
-* `isActive` - булев признак того, что ордер активен
+* `isActive` - a boolean sign that the order is active
 
-* `status` - описание статус обработки ордера
+* `status` - description of the order processing status
 
-* `offerType` - тип ордера, возможные варианты: `bid` или `ask`
+* `offerType` - order type, possible options:` bid` or `ask`
 
-* `price` - цена `базовой` валюты в `котируемой`
+* `price` - the price of the` base` currency in the `quoted`
 
-* `amount` - описание размера ордера в `базовой` валюте
+* `amount` - description of the order size in the` base` currency
 
-* `amount.origin` - размер, указанный при создании ордера
+* `amount.origin` - the size specified when creating the order
 
-* `amount.matched` - суммарный размер сделок, совершённых по ордеру
+* `amount.matched` - the total size of deals executed on the order
 
-* `amount.rest` - сколько осталось до закрытия ордера
+* `amount.rest` - how much is left before the order is closed
     
-## DELETE /api/market/v1/private/:userId/orders/:orderId
+## DELETE / api / market / v1 / private /: userId / orders /: orderId
 
-Отмена ордера.
+Cancel Order.
 
-## GET /api/market/v1/private/:userId/orders/?pair=:pair&limit=:limit&skip=:skip
+## GET / api / market / v1 / private /: userId / orders /? Pair =: pair & limit =: limit & skip =: skip
 
-* `pair` - идентификатор валютной пары
+* `pair` - currency pair identifier
 
-* `limit` - ограничение на количество возвращаемых записей
+* `limit` - limit on the number of returned records
 
-* `skip` - количество записей, которые необходимо пропустить
+* `skip` - the number of records that must be skipped
 
-Получение списка собственных ордеров. Формат ответа:
+Getting a list of your own orders. Answer format:
 
     {
       data: [
@@ -318,16 +318,16 @@ node index.js --api https://bitzlato.com/api \
       total: ...
     }
 
-* `data` - список описаний ордеров, в формате совпадающем с форматом ответа маршрута
-  `GET /api/market/v1/private/:userId/orders/:orderId`
+* `data` - list of order descriptions in the same format as the route response format
+  `GET / api / market / v1 / private /: userId / orders /: orderId`
 
-* `total` - общее количество ордеров, удовлетворяющих условиям фильтрации
+* `total` - the total number of orders that satisfy the filtering conditions
 
-## POST /api/market/v1/private/:userId/orders/
+## POST / api / market / v1 / private /: userId / orders /
 
-Создание нового ордера.
+Create a new order.
 
-Формат запроса:
+Request format:
 
     {
       pair: ...,
@@ -336,38 +336,38 @@ node index.js --api https://bitzlato.com/api \
       price: ...
     }
     
-* `pair` - идентификатор валютной пары
+* `pair` - currency pair identifier
 
-* `offerType` - тип ордера, возможные варианты: `bid` или `ask`
+* `offerType` - order type, possible options:` bid` or `ask`
 
-* `price` - цена `базовой` валюты в `котируемой`
+* `price` - the price of the` base` currency in the `quoted`
 
-* `amount` - описание размера ордера в `базовой` валюте
+* `amount` - description of the order size in the` base` currency
 
-Формат ответа совпадает с форматом ответа маршрута `GET /api/market/v1/private/:userId/orders/:orderId`.
+The response format is the same as the response format of the `GET / api / market / v1 / private /: userId / orders /: orderId` route.
 
-## POST /api/market/v1/private/:userId/orders/idle
+## POST / api / market / v1 / private /: userId / orders / idle
 
-Позволяет оценить результат создание ордера без его фактического создания. 
+It allows you to evaluate the result of the creation of an order without actually creating it.
 
-Формат запроса совпадает с форматом запроса маршрута `POST /api/market/v1/private/:userId/orders/`.
+The request format is the same as the request route format `POST / api / market / v1 / private /: userId / orders /`.
 
-Формат ответа совпадает с форматом ответа маршрута `GET /api/market/v1/private/:userId/orders/:orderId` за исключением
-поля `id`, которое не может быть определено.
+The response format is the same as the response format of the `GET / api / market / v1 / private /: userId / orders /: orderId` route.
+Exception, `id` fields that cannot be determined.
 
-## GET /api/market/v1/private/:userId/trades/?orderId=:orderId&pair=:pair&limit=:limit&skip=:skip
+## GET / api / market / v1 / private /: userId / trades /? OrderId =: orderId & pair =: pair & limit =: limit & skip =: skip
 
-Получение истории собственных сделок. Возможные параметры запроса:
+Getting your own transaction history. Possible query parameters:
 
-* `orderId` - идентификатор ордера
+* `orderId` - order identifier
 
-* `pair` - идентификатор валютной пары
+* `pair` - currency pair identifier
 
-* `limit` - ограничение на количество возвращаемых записей
+* `limit` - limit on the number of returned records
 
-* `skip` - количество записей, которые необходимо пропустить
+* `skip` - the number of records that must be skipped
 
-Формат ответа:
+Answer format:
 
     {
       data: [
@@ -388,91 +388,90 @@ node index.js --api https://bitzlato.com/api \
       total: ...
     }
     
-* `data` - массив описаний совершенных сделок
+* `data` - an array of descriptions of completed deals
 
-* `data.id` - идентификатор сделки
+* `data.id` - deal ID
 
-* `data.pair` - идентификатор валютной пары
+* `data.pair` - currency pair identifier
 
-* `data.action` - тип действия, возможные варианты: `bid` или `ask`
+* `data.action` - type of action, possible options:` bid` or `ask`
 
-* `data.amount` - описание размера сделки
+* `data.amount` - description of the deal size
 
-* `data.amount.base` - размер сделки в `базовой` валюте
+* `data.amount.base` - deal size in the` base` currency
 
-* `data.amount.quote` - размер сделки в `котируемой` валюте
+* `data.amount.quote` - deal size in` quoted 'currency
 
-* `data.price` - цена `базовой` валюты в `котируемой`
+* `data.price` - the price of the` base` currency in the `quoted`
 
-* `data.date` - дата совершения сделки
+* `data.date` - the date of the deal
 
-* `data.side` - тип сделки `sell` или `buy` определяется по типу более нового ордера
+* `data.side` - the type of the deal` sell` or `buy` is determined by the type of a new order
 
-* `data.fee` - размер комиссии по сделке. Комиссия всегда указывается в той валюте, которую получил пользователь в
-  результате проведения сделки
+* `data.fee` - the size of the deal commission. The commission is always specified in the currency that the user received in
+  the result of the transaction
 
-* `total` - общее количество ордеров, удовлетворяющих условиям фильтрации
+* `total` - the total number of deals that satisfy the filtering conditions
 
-# Статистика
+# Statistics
 
-## GET /api/market/v1/public/stats/candlestick/:pair?after=:after&before=:before&width=:width
+## GET / api / market / v1 / public / stats / candlestick /: pair? After =: after & before =: before & width =: width
 
-Получение данных для отображения "японских свечей".
+Getting data to display "candlesticks".
 
-Параметры запроса:
+Request parameters:
 
-* `pair` - идентификатор валютной пары
+* `pair` - currency pair identifier
 
-* `after` - ограничение по времени снизу на запрашиваемые данные.
+* `after` - time limit below the requested data.
 
-* `before` - ограничение по времени сверху на запрашиваемые данные, значение по-умолчанию - текущий момент
+* `before` - the time limit on top of the requested data, the default value is the current time
 
-* `width` - ширина интервала, возможные значения: `1h` (один час), `1d` (один день). В будущем возможно добавление
-  других значений (см. binance). Значение по умолчанию - `1h`.
+* `width` - interval width, possible values:` 1h` (one hour), `1d` (one day). In the future, you may add
+  other values ​​(see binance). The default is `1h`.
 
-В случае, когда количество запрашиваемых свеч (`(before - after)/width`) больше `200` (любой разумной цифры, записанной
-в конфигурационном файле) - возвращать ошибку `400 Bad Request`.
+In the case when the number of requested candles (`(before - after) / width`) is greater than` 200` (any reasonable digit written
+in the configuration file) - return the error `400 Bad Request`.
 
-Значения `after` и `before` должны округляться в меньшую и большую сторону соответственно по границам
-интервалов. Например, если в запросе `width=1h`, а `after=19:10` (на самом деле в запросе будет `unix-time`), то в
-качестве первой "свечи" необходимо возвращать ту, которая начинается в `19:00`.
+The values ​​of `after` and` before` should be rounded down and up, respectively, along the boundaries
+intervals. For example, if the query is `width = 1h`, and` after = 19: 10` (in fact, the query will be `unix-time`), then in
+As the first "candle" it is necessary to return the one that starts at `19: 00`.
 
-Формат ответа:
+Answer format:
 
-    [
-      {
-        date: ...,
-        price: {
-          open: ...,
-          close: ...,
-          high: ...,
-          low: ...
-        },
-        volume: {
-          base: ...,
-          quote: ...
-        }
-      },
-      ...
-    ]
+    [
+      {
+        date: ...,
+        price: {
+          open: ...,
+          close: ...,
+          high: ...,
+          low: ...
+        },
+        volume: {
+          base: ...,
+          quote: ...
+        }
+      },
+      ...
+    ]
 
-В массиве находиться список описаний "свечей" со следующими полями:
+The array contains a list of descriptions of "candles" with the following fields:
 
-* `date` - дата "создания свечи", начало интервала времени, соответствующего данной свече
+* `date` - the date of the creation of the candle, the beginning of the time interval corresponding to this candle
 
-* `price` - данные о цене `базовой` валюты в `котируемой` в течении интервала
+* `price` - price data of the` base` currency in `quoted 'during the interval
 
-* `price.open` -  в начале интервала
+* `price.open` - at the beginning of the interval
 
-* `price.close` - в конце интервала
+* `price.close` - at the end of the interval
 
-* `price.hight` - максимум за интервал
+* `price.hight` - maximum for the interval
 
-* `price.low` - минимум за интервал
+* `price.low` - minimum for the interval
 
-* `volume` - данные об обороте за интервал
+* `volume` - turnover data for the interval
 
-* `volume.base` - в `базовой` валюте
+* `volume.base` - in` base` currency
 
-* `volume.quote` - в `котируемой` валюте
-
+* `volume.quote` - in` quoted 'currency
