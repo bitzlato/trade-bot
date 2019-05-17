@@ -23,6 +23,13 @@ npm install
 node index.js --token "16e2af1f-4231-4370-a127-ca00280e568b"
 ```
 
+### Внимание!
+Сейчас бот не умеет работать на парах с RUBM и USDM. Чтобы он не падал с ошибкой, необходимо перечислить пары в параметре запуска `--pairs`
+Например:
+```
+node index.js --token "c4e2b089-4573-45fe-b882-80828569b5dc" --pairs=ETH-BTC,LTC-BTC,DASH-BTC,LTC-ETH,DASH-ETH
+```
+
 Остальные параметры:
 ```
 node index.js --help
