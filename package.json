@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/bitzlato/trade-bot#readme",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "ccxt": "^1.18.258",
     "commander": "^2.19.0"
   },
